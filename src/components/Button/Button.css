@@ -3,10 +3,11 @@
   --button-border: transparent;
   --button-color: var(--color-text);
   min-width: 0;
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
+  gap: 0;
   border: 1px solid var(--button-border);
   border-radius: var(--radius-md);
   color: var(--button-color);
@@ -21,6 +22,24 @@
     background-color var(--duration-fast) var(--ease-out),
     border-color var(--duration-fast) var(--ease-out),
     box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.ui-button__icon {
+  display: inline-grid;
+  place-items: center;
+  margin-right: var(--space-2);
+}
+
+.ui-button__label {
+  transition: transform var(--duration-normal) var(--ease-spring);
+}
+
+.ui-button--loading .ui-button__label {
+  transform: translateX(-3px);
+}
+
+.ui-button--loading .ui-button__loader {
+  margin-left: 7px;
 }
 
 .ui-button--sm { min-height: 32px; padding: 0 var(--space-3); font-size: 0.75rem; }
@@ -70,13 +89,5 @@
 
 .ui-button:not(:disabled):active { transform: translateY(1px) scale(0.99); }
 .ui-button:disabled { cursor: not-allowed; opacity: 0.5; }
+.ui-button--loading:disabled { cursor: wait; opacity: 0.82; }
 .ui-button:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
-
-.ui-button__spinner {
-  width: 15px;
-  height: 15px;
-  border: 2px solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
-  animation: spin 650ms linear infinite;
-}

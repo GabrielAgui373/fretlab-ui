@@ -1,0 +1,131 @@
+.app-titlebar {
+  position: relative;
+  z-index: var(--z-titlebar);
+  height: 42px;
+  display: grid;
+  grid-template-columns: auto minmax(60px, 1fr) auto;
+  align-items: stretch;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(56, 59, 85, 0.72);
+  color: var(--color-text-muted);
+  background:
+    linear-gradient(90deg, rgba(144, 140, 255, 0.055), transparent 26%),
+    var(--color-background-subtle);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.015);
+  user-select: none;
+}
+
+.app-titlebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-left: 14px;
+}
+
+.app-titlebar__mark {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(144, 140, 255, 0.22);
+  border-radius: 8px 8px 8px 3px;
+  color: var(--color-accent);
+  background: var(--color-accent-soft);
+}
+
+.app-titlebar__mark svg {
+  width: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-width: 1.55;
+}
+
+.app-titlebar__brand strong {
+  color: var(--color-text-soft);
+  font-size: 0.75rem;
+  letter-spacing: 0.015em;
+}
+
+.app-titlebar__edition {
+  padding: 3px 5px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-subtle);
+  background: rgba(255, 255, 255, 0.035);
+  font-size: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.app-titlebar__drag-area { min-width: 0; }
+
+.app-titlebar__controls {
+  display: flex;
+  align-items: stretch;
+}
+
+.app-titlebar__control {
+  width: 46px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  color: var(--color-text-muted);
+  background: transparent;
+  cursor: default;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
+}
+
+.app-titlebar__control:hover {
+  color: var(--color-text);
+  background: var(--color-surface-hover);
+}
+
+.app-titlebar__control:active { background: var(--color-surface-raised); }
+.app-titlebar__control:focus-visible { outline: var(--focus-ring); outline-offset: -3px; }
+
+.app-titlebar__control--close:hover {
+  color: #fff;
+  background: var(--color-danger);
+}
+
+.app-titlebar__minimize {
+  width: 11px;
+  height: 1px;
+  background: currentColor;
+}
+
+.app-titlebar__maximize {
+  width: 10px;
+  height: 10px;
+  border: 1px solid currentColor;
+  border-radius: 1px;
+}
+
+.app-titlebar__close {
+  position: relative;
+  width: 12px;
+  height: 12px;
+}
+
+.app-titlebar__close::before,
+.app-titlebar__close::after {
+  content: "";
+  position: absolute;
+  top: 5.5px;
+  left: 0;
+  width: 12px;
+  height: 1px;
+  background: currentColor;
+}
+
+.app-titlebar__close::before { transform: rotate(45deg); }
+.app-titlebar__close::after { transform: rotate(-45deg); }
+
+@media (max-width: 560px) {
+  .app-titlebar__edition { display: none; }
+  .app-titlebar__control { width: 42px; }
+}

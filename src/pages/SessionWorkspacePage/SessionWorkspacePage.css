@@ -1,4 +1,4 @@
-.workspace-page { min-height: 100vh; color: var(--color-text); background: var(--color-background); }
+.workspace-page { min-height: 100%; color: var(--color-text); background: var(--color-background); }
 .workspace-header { min-height: 72px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--space-4); padding: 12px 25px; border-bottom: 1px solid var(--color-border); background: #121421; }
 .workspace-header__title { display: grid; gap: 3px; }
 .workspace-header__title strong { font-size: 0.9375rem; }
@@ -6,7 +6,7 @@
 .workspace-saved { display: flex; align-items: center; gap: 6px; color: var(--color-text-subtle); font-size: 0.625rem; }
 .workspace-saved i { width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); box-shadow: 0 0 8px rgba(144, 140, 255, 0.55); }
 
-.workspace-body { min-height: calc(100vh - 72px); display: grid; grid-template-columns: 75px 1fr; background: linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px) 0 0 / 100% 54px, var(--color-background); }
+.workspace-body { min-height: calc(100vh - 114px); display: grid; grid-template-columns: 75px 1fr; background: linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px) 0 0 / 100% 54px, var(--color-background); }
 .workspace-rail { display: grid; grid-template-rows: auto 1fr auto; justify-items: center; gap: 15px; padding: 27px 0; border-right: 1px solid var(--color-border); color: var(--color-text-subtle); font-size: 0.5625rem; }
 .workspace-rail i { width: 1px; background: linear-gradient(var(--color-accent), rgba(255, 255, 255, 0.03)); }
 .workspace-rail small { writing-mode: vertical-rl; }

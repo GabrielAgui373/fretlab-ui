@@ -1,5 +1,5 @@
 .sessions-layout {
-  min-height: 100vh;
+  min-height: 100%;
   background:
     radial-gradient(circle at 90% 0, rgba(144, 140, 255, 0.08), transparent 30rem),
     var(--color-background-subtle);

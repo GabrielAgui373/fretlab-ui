@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react";
 import { Button, Modal, TextInput } from "../../../components";
+import type { TextInputChangeEvent } from "../../../components";
 import type { SessionFormValues } from "../types";
 import "./sessions.css";
 
@@ -26,6 +27,16 @@ export function SessionFormModal({
     event.preventDefault();
     if (!values.name.trim() || isBusy) return;
     void onSubmit(values);
+  }
+
+  function handleNameChange(event: TextInputChangeEvent) {
+    const name = event.currentTarget.value;
+    setValues((current) => ({ ...current, name }));
+  }
+
+  function handleDescriptionChange(event: TextInputChangeEvent) {
+    const description = event.currentTarget.value;
+    setValues((current) => ({ ...current, description }));
   }
 
   const footer = (
@@ -59,9 +70,7 @@ export function SessionFormModal({
           autoFocus
           label="Nome"
           maxLength={120}
-          onChange={(event) =>
-            setValues((current) => ({ ...current, name: event.currentTarget.value }))
-          }
+          onChange={handleNameChange}
           placeholder="Ex.: Improviso em Dó menor"
           showCount
           value={values.name}
@@ -70,9 +79,7 @@ export function SessionFormModal({
           label="Descrição (opcional)"
           maxLength={2000}
           multiline
-          onChange={(event) =>
-            setValues((current) => ({ ...current, description: event.currentTarget.value }))
-          }
+          onChange={handleDescriptionChange}
           placeholder="Objetivos, repertório ou lembretes para esta sessão..."
           rows={4}
           showCount

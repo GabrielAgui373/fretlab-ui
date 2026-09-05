@@ -62,6 +62,7 @@
     transform var(--duration-fast) var(--ease-out);
 
   --z-sidebar: 10;
+  --z-titlebar: 50;
   --z-modal: 100;
   --z-toast: 200;
   --z-loader: 300;

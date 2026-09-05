@@ -3,6 +3,8 @@ import { sessionApi } from "./api";
 import type { Session, SessionFormValues } from "./types";
 import { getErrorMessage } from "./utils";
 
+const MIN_ACTION_DURATION = import.meta.env.DEV ? 1500 : 0;
+
 function upsert(items: Session[], updated: Session) {
   return [updated, ...items.filter((item) => item.id !== updated.id)];
 }
@@ -35,6 +37,7 @@ export function useSessionLibrary() {
   }, [notice]);
 
   const run = useCallback(async <T,>(key: string, operation: () => Promise<T>) => {
+    const startedAt = performance.now();
     setBusyAction(key);
     setError(null);
     try {
@@ -43,6 +46,10 @@ export function useSessionLibrary() {
       setError(getErrorMessage(reason));
       return null;
     } finally {
+      const remainingTime = MIN_ACTION_DURATION - (performance.now() - startedAt);
+      if (remainingTime > 0) {
+        await new Promise((resolve) => window.setTimeout(resolve, remainingTime));
+      }
       setBusyAction(null);
     }
   }, []);

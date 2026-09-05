@@ -75,7 +75,7 @@ export function SessionsPage({ onOpen }: { onOpen: (session: Session) => void })
   }
 
   if (isLoading) {
-    return <Loader fullScreen label="Preparando sua biblioteca" />;
+    return <Loader label="Preparando sua biblioteca" variant="fullscreen" />;
   }
 
   return (

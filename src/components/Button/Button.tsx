@@ -1,4 +1,5 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
+import { Loader } from "../Loader";
 import "./Button.css";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
@@ -29,6 +30,7 @@ export function Button({
     `ui-button--${variant}`,
     `ui-button--${size}`,
     fullWidth ? "ui-button--full" : "",
+    isLoading ? "ui-button--loading" : "",
     className,
   ]
     .filter(Boolean)
@@ -42,8 +44,14 @@ export function Button({
       disabled={disabled || isLoading}
       type={type}
     >
-      {isLoading ? <span className="ui-button__spinner" /> : icon}
+      {icon && <span className="ui-button__icon">{icon}</span>}
       {children && <span className="ui-button__label">{children}</span>}
+      <Loader
+        active={isLoading}
+        className="ui-button__loader"
+        label="Carregando ação"
+        variant="compact"
+      />
     </button>
   );
 }
