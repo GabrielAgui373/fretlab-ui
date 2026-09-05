@@ -1,0 +1,28 @@
+.workspace-page { min-height: 100vh; color: var(--color-text); background: var(--color-background); }
+.workspace-header { min-height: 72px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--space-4); padding: 12px 25px; border-bottom: 1px solid var(--color-border); background: #121421; }
+.workspace-header__title { display: grid; gap: 3px; }
+.workspace-header__title strong { font-size: 0.9375rem; }
+.workspace-header__actions { display: flex; align-items: center; gap: var(--space-4); }
+.workspace-saved { display: flex; align-items: center; gap: 6px; color: var(--color-text-subtle); font-size: 0.625rem; }
+.workspace-saved i { width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); box-shadow: 0 0 8px rgba(144, 140, 255, 0.55); }
+
+.workspace-body { min-height: calc(100vh - 72px); display: grid; grid-template-columns: 75px 1fr; background: linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px) 0 0 / 100% 54px, var(--color-background); }
+.workspace-rail { display: grid; grid-template-rows: auto 1fr auto; justify-items: center; gap: 15px; padding: 27px 0; border-right: 1px solid var(--color-border); color: var(--color-text-subtle); font-size: 0.5625rem; }
+.workspace-rail i { width: 1px; background: linear-gradient(var(--color-accent), rgba(255, 255, 255, 0.03)); }
+.workspace-rail small { writing-mode: vertical-rl; }
+
+.workspace-placeholder { place-self: center; width: min(560px, calc(100% - 50px)); padding: 60px 0; text-align: center; animation: rise-in var(--duration-slow) var(--ease-spring) both; }
+.workspace-placeholder__art { width: 90px; height: 90px; display: grid; place-items: center; margin: 0 auto 28px; border: 1px solid rgba(144, 140, 255, 0.18); border-radius: 28px 28px 28px 8px; color: var(--color-accent); background: var(--color-accent-soft); box-shadow: 0 0 0 10px rgba(144, 140, 255, 0.02); }
+.workspace-placeholder h1 { margin: 9px 0 0; font-size: clamp(1.9rem, 5vw, 2.8rem); letter-spacing: -0.055em; }
+.workspace-placeholder > p { max-width: 470px; margin: 15px auto 29px; color: var(--color-text-muted); font-size: 0.8125rem; line-height: 1.7; }
+.workspace-notes { max-width: 460px; margin: 0 auto; padding: 17px 19px; border: 1px solid var(--color-border); border-radius: var(--radius-lg); text-align: left; background: rgba(24, 27, 43, 0.58); }
+.workspace-notes span { color: var(--color-text-subtle); font-size: 0.5625rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.workspace-notes p { margin: 7px 0 0; color: var(--color-text-muted); font-size: 0.75rem; line-height: 1.55; }
+
+@media (max-width: 560px) {
+  .workspace-header { padding-inline: 13px; }
+  .workspace-saved { display: none; }
+  .workspace-header__actions .ui-button { width: 40px; padding: 0; }
+  .workspace-header__actions .ui-button__label { display: none; }
+  .workspace-body { grid-template-columns: 45px 1fr; }
+}

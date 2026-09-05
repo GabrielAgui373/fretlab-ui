@@ -1,0 +1,82 @@
+.ui-button {
+  --button-background: transparent;
+  --button-border: transparent;
+  --button-color: var(--color-text);
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px solid var(--button-border);
+  border-radius: var(--radius-md);
+  color: var(--button-color);
+  background: var(--button-background);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.ui-button--sm { min-height: 32px; padding: 0 var(--space-3); font-size: 0.75rem; }
+.ui-button--md { min-height: 40px; padding: 0 var(--space-4); font-size: 0.8125rem; }
+.ui-button--lg { min-height: 46px; padding: 0 var(--space-5); font-size: 0.875rem; }
+.ui-button--full { width: 100%; }
+
+.ui-button--primary {
+  --button-background: var(--color-accent);
+  --button-border: var(--color-accent);
+  --button-color: var(--color-accent-contrast);
+  box-shadow: 0 8px 24px rgba(144, 140, 255, 0.12);
+}
+
+.ui-button--primary:not(:disabled):hover {
+  --button-background: var(--color-accent-hover);
+  --button-border: var(--color-accent-hover);
+  box-shadow: 0 10px 30px rgba(144, 140, 255, 0.2);
+}
+
+.ui-button--secondary {
+  --button-background: var(--color-surface-raised);
+  --button-border: var(--color-border-strong);
+}
+
+.ui-button--secondary:not(:disabled):hover {
+  --button-background: var(--color-surface-hover);
+  --button-border: var(--color-border-focus);
+}
+
+.ui-button--ghost { --button-color: var(--color-text-muted); }
+.ui-button--ghost:not(:disabled):hover {
+  --button-background: var(--color-surface-hover);
+  --button-color: var(--color-text);
+}
+
+.ui-button--danger {
+  --button-background: var(--color-danger);
+  --button-border: var(--color-danger);
+  --button-color: #fff;
+}
+
+.ui-button--danger:not(:disabled):hover {
+  --button-background: var(--color-danger-hover);
+  --button-border: var(--color-danger-hover);
+}
+
+.ui-button:not(:disabled):active { transform: translateY(1px) scale(0.99); }
+.ui-button:disabled { cursor: not-allowed; opacity: 0.5; }
+.ui-button:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
+
+.ui-button__spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 650ms linear infinite;
+}

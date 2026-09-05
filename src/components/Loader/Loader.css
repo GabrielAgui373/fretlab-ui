@@ -1,0 +1,119 @@
+.ui-loader {
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  color: var(--color-text);
+}
+
+.ui-loader--fullscreen {
+  position: fixed;
+  z-index: var(--z-loader);
+  inset: 0;
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 50% 48%, var(--color-accent-soft), transparent 22rem),
+    var(--color-background);
+  animation: loader-appear var(--duration-normal) var(--ease-out) both;
+}
+
+.ui-loader__content {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+}
+
+.ui-loader__signal {
+  position: relative;
+  width: 180px;
+  height: 56px;
+  filter: drop-shadow(0 0 12px rgba(144, 140, 255, 0.13));
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+
+.ui-loader__signal svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+  fill: none;
+  stroke-linecap: round;
+}
+
+.ui-loader__wave {
+  opacity: 0.18;
+  stroke-width: 1.6;
+}
+
+.ui-loader__wave--primary,
+.ui-loader__pulse--primary {
+  stroke: var(--color-accent);
+}
+
+.ui-loader__wave--secondary,
+.ui-loader__pulse--secondary {
+  stroke: var(--color-secondary);
+}
+
+.ui-loader__pulse {
+  stroke-width: 2.2;
+  stroke-dasharray: 0.2 0.8;
+  animation: loader-signal 1.75s linear infinite;
+}
+
+.ui-loader__pulse--secondary {
+  stroke-width: 1.8;
+  stroke-dasharray: 0.16 0.84;
+  animation-duration: 2.05s;
+  animation-delay: -0.72s;
+}
+
+.ui-loader__marker {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  border: 1px solid var(--color-background);
+  border-radius: 50%;
+  background: var(--color-text);
+  box-shadow: 0 0 0 4px rgba(246, 244, 255, 0.08);
+  transform: translate(-50%, -50%);
+  animation: loader-marker 1.75s var(--ease-out) infinite;
+}
+
+.ui-loader__label {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ui-loader__ellipsis {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.ui-loader__ellipsis i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: loader-dot 1.2s ease-in-out infinite;
+}
+
+.ui-loader__ellipsis i:nth-child(2) { animation-delay: 140ms; }
+.ui-loader__ellipsis i:nth-child(3) { animation-delay: 280ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-loader__pulse {
+    stroke-dasharray: none;
+    opacity: 0.72;
+  }
+
+  .ui-loader__marker { animation: none; }
+}

@@ -1,0 +1,52 @@
+* { box-sizing: border-box; }
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+html { background: var(--color-background); }
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  color: var(--color-text);
+  background: var(--color-background);
+  font-family: "Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif;
+  font-size: 16px;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea { font: inherit; }
+
+button { color: inherit; }
+
+::selection {
+  color: var(--color-accent-contrast);
+  background: var(--color-accent);
+}
+
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: var(--color-background); }
+::-webkit-scrollbar-thumb {
+  border: 2px solid var(--color-background);
+  border-radius: var(--radius-round);
+  background: var(--color-border-strong);
+}
+
+.eyebrow {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: 0.625rem;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
