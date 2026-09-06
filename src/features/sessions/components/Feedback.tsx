@@ -1,5 +1,4 @@
-import { Icon } from "../../../components";
-import "./sessions.css";
+import { Toast } from "../../../components";
 
 export function Feedback({
   error,
@@ -13,13 +12,14 @@ export function Feedback({
   if (!error && !notice) return null;
 
   return (
-    <div className={`feedback ${error ? "feedback--error" : "feedback--success"}`} role="status">
-      <span>{error || notice}</span>
-      {error && (
-        <button aria-label="Fechar aviso" onClick={onDismiss}>
-          <Icon name="close" size={17} />
-        </button>
-      )}
-    </div>
+    <Toast
+      closable={Boolean(error)}
+      isOpen
+      onClose={onDismiss}
+      placement="bottom-right"
+      variant={error ? "danger" : "success"}
+    >
+      {error || notice}
+    </Toast>
   );
 }
