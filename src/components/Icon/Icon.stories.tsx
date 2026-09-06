@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
-import { Icon, iconNames } from './Icon';
+import { Icon, iconNames } from '.';
 
 const meta = {
   component: Icon,
@@ -39,16 +39,22 @@ export const Decorative: Story = {
 
 export const Library: Story = {
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 44px)', gap: 12 }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(92px, 1fr))',
+        gap: 12,
+        maxWidth: 780,
+      }}
+    >
       {iconNames.map((name) => (
-        <span
+        <div
           key={name}
-          title={name}
           style={{
-            width: 44,
-            height: 44,
             display: 'grid',
-            placeItems: 'center',
+            justifyItems: 'center',
+            gap: 8,
+            padding: 12,
             border: '1px solid var(--color-border)',
             borderRadius: 'var(--radius-md)',
             color: 'var(--color-text-soft)',
@@ -56,7 +62,8 @@ export const Library: Story = {
           }}
         >
           <Icon name={name} size={20} />
-        </span>
+          <small style={{ color: 'var(--color-text-subtle)', fontSize: 10 }}>{name}</small>
+        </div>
       ))}
     </div>
   ),
