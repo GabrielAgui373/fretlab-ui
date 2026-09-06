@@ -1,19 +1,22 @@
-import { ReactNode } from "react";
+import { ReactNode, SVGAttributes, forwardRef, useId } from "react";
 
-export type IconName =
-  | "add"
-  | "arrow"
-  | "back"
-  | "close"
-  | "edit"
-  | "equalizer"
-  | "library"
-  | "more"
-  | "play"
-  | "search"
-  | "settings"
-  | "spark"
-  | "trash";
+export const iconNames = [
+  "add",
+  "arrow",
+  "back",
+  "close",
+  "edit",
+  "equalizer",
+  "library",
+  "more",
+  "play",
+  "search",
+  "settings",
+  "spark",
+  "trash",
+] as const;
+
+export type IconName = (typeof iconNames)[number];
 
 const paths: Record<IconName, ReactNode> = {
   add: <path d="M12 5v14M5 12h14" />,
@@ -31,12 +34,47 @@ const paths: Record<IconName, ReactNode> = {
   trash: <><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5" /></>,
 };
 
-export function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
+export type IconProps = Omit<SVGAttributes<SVGSVGElement>, "children" | "name" | "strokeWidth"> & {
+  decorative?: boolean;
+  name: IconName;
+  size?: number | string;
+  strokeWidth?: number;
+  title?: string;
+};
+
+export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon({
+  decorative,
+  name,
+  size = 20,
+  strokeWidth = 1.8,
+  title,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
+  ...props
+}, ref) {
+  const titleId = useId();
+  const hasAccessibleName = Boolean(title || ariaLabel || ariaLabelledBy);
+  const isDecorative = decorative ?? !hasAccessibleName;
+  const labelledBy = title ? titleId : ariaLabelledBy;
+
   return (
-    <svg aria-hidden="true" fill="none" height={size} viewBox="0 0 24 24" width={size}>
-      <g stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8">
+    <svg
+      {...props}
+      aria-hidden={isDecorative ? true : undefined}
+      aria-label={isDecorative ? undefined : ariaLabel}
+      aria-labelledby={isDecorative ? undefined : labelledBy}
+      fill="none"
+      focusable="false"
+      height={size}
+      ref={ref}
+      role={isDecorative ? undefined : "img"}
+      viewBox="0 0 24 24"
+      width={size}
+    >
+      {!isDecorative && title && <title id={titleId}>{title}</title>}
+      <g stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth}>
         {paths[name]}
       </g>
     </svg>
   );
-}
+});

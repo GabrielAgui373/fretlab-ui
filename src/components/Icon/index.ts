@@ -1,2 +1,2 @@
-export { Icon } from "./Icon";
-export type { IconName } from "./Icon";
+export { Icon, iconNames } from "./Icon";
+export type { IconName, IconProps } from "./Icon";
