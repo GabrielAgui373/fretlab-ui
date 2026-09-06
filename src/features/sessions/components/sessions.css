@@ -124,25 +124,26 @@
 .session-card__art--3 { color: #251610; background: #ff9667; }
 .session-card__art--4 { color: #f1edff; background: #584d78; }
 
-.session-card__play {
+.session-card__play.ui-icon-button {
   position: relative;
   z-index: 2;
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
-  padding: 0 0 0 2px;
+  --icon-button-size: 36px;
+  padding-left: 2px;
   border: 0;
   border-radius: 50%;
   color: var(--color-text);
   background: var(--color-background);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.24);
-  cursor: pointer;
-  transition: transform var(--duration-fast) var(--ease-spring);
 }
 
-.session-card__play:hover { transform: scale(1.09); }
-.session-card__play:disabled { cursor: wait; opacity: 0.55; }
+.session-card__play.ui-icon-button:not(:disabled):hover {
+  background: var(--color-background);
+}
+
+.session-card__play.ui-icon-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
 
 .session-card__content { padding: 15px var(--space-4) 14px; }
 .session-card__heading { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }

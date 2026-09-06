@@ -1,8 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
-import { Button, Icon, Loader, TextInput } from "../../components";
+import { Button, Icon, Loader, TextInput, Toast, Tooltip } from "../../components";
 import {
   DeleteSessionModal,
-  Feedback,
   SessionCard,
   SessionDetailsModal,
   SessionFormModal,
@@ -83,9 +82,14 @@ export function SessionsPage({ onOpen }: { onOpen: (session: Session) => void })
       <main className="sessions-main">
         <header className="sessions-header">
           <div><span className="eyebrow">Sua biblioteca</span><h1>Sessões</h1></div>
-          <Button icon={<Icon name="add" size={18} />} onClick={() => setCreateOpen(true)}>
-            Nova sessão
-          </Button>
+          <Tooltip content="Criar uma nova sessão de estudo" placement="left">
+            <Button
+              icon={<Icon name="add" size={18} decorative />}
+              onClick={() => setCreateOpen(true)}
+            >
+              Nova sessão
+            </Button>
+          </Tooltip>
         </header>
 
         <section className="sessions-hero">
@@ -132,9 +136,14 @@ export function SessionsPage({ onOpen }: { onOpen: (session: Session) => void })
               <h3>{search ? "Nenhuma sessão encontrada" : "Crie seu primeiro espaço"}</h3>
               <p>{search ? "Tente buscar por outro nome ou descrição." : "Comece uma sessão para organizar faixas, trechos e anotações."}</p>
               {!search && (
-                <Button icon={<Icon name="add" size={18} />} onClick={() => setCreateOpen(true)}>
-                  Criar primeira sessão
-                </Button>
+                <Tooltip content="Criar sua primeira sessão de estudo" placement="top">
+                  <Button
+                    icon={<Icon name="add" size={18} decorative />}
+                    onClick={() => setCreateOpen(true)}
+                  >
+                    Criar primeira sessão
+                  </Button>
+                </Tooltip>
               )}
             </div>
           )}
@@ -175,7 +184,15 @@ export function SessionsPage({ onOpen }: { onOpen: (session: Session) => void })
         onConfirm={() => void handleDelete()}
         session={deleteTarget}
       />
-      <Feedback error={error} notice={notice} onDismiss={clearError} />
+      <Toast
+        closable={Boolean(error)}
+        isOpen={Boolean(error || notice)}
+        layout="compact"
+        onClose={clearError}
+        placement="top-center"
+        title={error || notice}
+        variant={error ? "danger" : "success"}
+      />
     </div>
   );
 }

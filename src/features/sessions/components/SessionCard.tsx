@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Icon } from "../../../components";
+import { Icon, IconButton, Tooltip } from "../../../components";
 import type { Session } from "../types";
 import { formatRelativeDate } from "../utils";
 import "./sessions.css";
@@ -29,14 +29,16 @@ export const SessionCard = memo(function SessionCard({
       />
       <div className={`session-card__art session-card__art--${(index % 4) + 1}`}>
         <span>{session.name.slice(0, 1).toLocaleUpperCase()}</span>
-        <button
-          aria-label={`Abrir ${session.name}`}
-          className="session-card__play"
-          disabled={isBusy}
-          onClick={() => onOpen(session)}
-        >
-          <Icon name="play" size={18} />
-        </button>
+        <Tooltip content={`Abrir ${session.name}`} placement="left">
+          <IconButton
+            aria-label={`Abrir ${session.name}`}
+            className="session-card__play"
+            icon={<Icon name="play" size={18} decorative />}
+            isLoading={isBusy}
+            onClick={() => onOpen(session)}
+            variant="secondary"
+          />
+        </Tooltip>
       </div>
       <div className="session-card__content">
         <div className="session-card__heading">

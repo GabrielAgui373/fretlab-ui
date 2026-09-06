@@ -15,11 +15,11 @@ export function Feedback({
     <Toast
       closable={Boolean(error)}
       isOpen
+      layout="compact"
       onClose={onDismiss}
-      placement="bottom-right"
+      placement="top-center"
+      title={error || notice}
       variant={error ? "danger" : "success"}
-    >
-      {error || notice}
-    </Toast>
+    />
   );
 }
