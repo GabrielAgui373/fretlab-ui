@@ -36,12 +36,59 @@ export const Default: Story = {
   },
 };
 
-export const WithIcon: Story = {
+export const WithLeadingIcon: Story = {
   args: {
     'aria-label': 'Buscar sessoes',
     leadingIcon: <Icon name="search" size={18} />,
     placeholder: 'Buscar sessao...',
     type: 'search',
+  },
+};
+
+export const WithTrailingIcon: Story = {
+  args: {
+    label: 'Email',
+    placeholder: 'voce@email.com',
+    trailingIcon: <Icon name="mail" size={18} />,
+    type: 'email',
+  },
+};
+
+export const WithBothIcons: Story = {
+  args: {
+    label: 'Link',
+    leadingIcon: <Icon name="link" size={18} />,
+    placeholder: 'https://fretlab.app',
+    trailingIcon: <Icon name="externalLink" size={18} />,
+    type: 'url',
+  },
+};
+
+export const Focused: Story = {
+  args: {
+    autoFocus: true,
+    label: 'Nome',
+    placeholder: 'Ex.: Improviso em Do menor',
+  },
+};
+
+export const Disabled: Story = {
+  args: {
+    disabled: true,
+    label: 'Nome',
+    leadingIcon: <Icon name="lock" size={18} />,
+    placeholder: 'Campo indisponivel',
+    readOnly: true,
+    value: 'Sessao arquivada',
+  },
+};
+
+export const ReadOnly: Story = {
+  args: {
+    label: 'Slug',
+    readOnly: true,
+    trailingIcon: <Icon name="copy" size={18} />,
+    value: 'improviso-em-do-menor',
   },
 };
 
@@ -59,6 +106,17 @@ export const WithError: Story = {
   },
 };
 
+export const WithCount: Story = {
+  args: {
+    label: 'Titulo',
+    maxLength: 120,
+    readOnly: true,
+    showCount: true,
+    trailingIcon: <Icon name="edit" size={18} />,
+    value: 'Improviso em Do menor',
+  },
+};
+
 export const Multiline: Story = {
   args: {
     label: 'Descricao',
@@ -70,4 +128,31 @@ export const Multiline: Story = {
     showCount: true,
     value: 'Treinar entrada do solo e repetir o trecho final.',
   },
+};
+
+export const States: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 18, maxWidth: 420 }}>
+      <TextInput label="Padrao" placeholder="Digite algo..." />
+      <TextInput
+        label="Com icones"
+        leadingIcon={<Icon name="search" size={18} />}
+        placeholder="Buscar..."
+        trailingIcon={<Icon name="filter" size={18} />}
+      />
+      <TextInput
+        disabled
+        label="Desabilitado"
+        readOnly
+        trailingIcon={<Icon name="lock" size={18} />}
+        value="Nao editavel"
+      />
+      <TextInput
+        error="Informe um valor valido."
+        label="Erro"
+        leadingIcon={<Icon name="warning" size={18} />}
+        placeholder="Campo obrigatorio"
+      />
+    </div>
+  ),
 };

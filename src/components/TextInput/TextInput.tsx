@@ -13,6 +13,7 @@ type SharedProps = {
   label?: string;
   leadingIcon?: ReactNode;
   showCount?: boolean;
+  trailingIcon?: ReactNode;
 };
 
 type InputProps = SharedProps &
@@ -39,13 +40,16 @@ export function TextInput(props: TextInputProps) {
     maxLength,
     multiline,
     showCount = false,
+    trailingIcon,
     value,
   } = props;
   const describedBy = error ? `${id}-error` : hint ? `${id}-hint` : undefined;
   const length = typeof value === "string" ? value.length : 0;
   const controlClasses = [
     "ui-text-input__control",
-    leadingIcon ? "ui-text-input__control--with-icon" : "",
+    leadingIcon ? "ui-text-input__control--with-leading-icon" : "",
+    trailingIcon ? "ui-text-input__control--with-trailing-icon" : "",
+    showCount && maxLength ? "ui-text-input__control--with-count" : "",
     error ? "ui-text-input__control--error" : "",
     className,
   ]
@@ -61,6 +65,7 @@ export function TextInput(props: TextInputProps) {
       leadingIcon: _leadingIcon,
       multiline: _multiline,
       showCount: _showCount,
+      trailingIcon: _trailingIcon,
       ...textareaProps
     } = props as TextareaProps;
     control = (
@@ -80,6 +85,7 @@ export function TextInput(props: TextInputProps) {
       leadingIcon: _leadingIcon,
       multiline: _multiline,
       showCount: _showCount,
+      trailingIcon: _trailingIcon,
       ...inputProps
     } = props as InputProps;
     control = (
@@ -97,8 +103,9 @@ export function TextInput(props: TextInputProps) {
     <label className="ui-text-input" htmlFor={id}>
       {label && <span className="ui-text-input__label">{label}</span>}
       <span className="ui-text-input__field">
-        {leadingIcon && <span className="ui-text-input__icon">{leadingIcon}</span>}
+        {leadingIcon && <span className="ui-text-input__icon ui-text-input__icon--leading">{leadingIcon}</span>}
         {control}
+        {trailingIcon && <span className="ui-text-input__icon ui-text-input__icon--trailing">{trailingIcon}</span>}
         {showCount && maxLength && (
           <span className="ui-text-input__count">{length}/{maxLength}</span>
         )}

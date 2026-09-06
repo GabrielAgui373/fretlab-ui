@@ -1,5 +1,5 @@
 import type { Preview } from "@storybook/react-vite";
-import { fretlabTheme } from "./fretlabTheme";
+import { fretlabStorybookBackgrounds, fretlabTheme } from "./fretlabTheme";
 import "../src/theme/index.css";
 
 const preview: Preview = {
@@ -11,6 +11,7 @@ const preview: Preview = {
           padding: '32px',
           color: "var(--color-text)",
           background: "var(--color-background)",
+          fontFamily: '"Avenir Next", Avenir, "Segoe UI", system-ui, sans-serif',
         }}
       >
         <Story />
@@ -19,11 +20,8 @@ const preview: Preview = {
   ],
   parameters: {
     backgrounds: {
-      default: "fretlab",
-      values: [
-        { name: "fretlab", value: "#090a12" },
-        { name: "surface", value: "#121421" },
-      ],
+      default: "fretlab purple",
+      values: fretlabStorybookBackgrounds,
     },
     controls: {
       matchers: {
