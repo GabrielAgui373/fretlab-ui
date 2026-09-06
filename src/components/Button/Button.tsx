@@ -1,4 +1,5 @@
-import { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactElement } from "react";
+import type { IconProps } from "../Icon";
 import { Loader } from "../Loader";
 import "./Button.css";
 
@@ -9,7 +10,7 @@ export type ButtonIconPosition = "left" | "right";
 
 export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> & {
   fullWidth?: boolean;
-  icon?: ReactNode;
+  icon?: ReactElement<IconProps>;
   iconPosition?: ButtonIconPosition;
   isLoading?: boolean;
   size?: ButtonSize;

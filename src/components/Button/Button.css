@@ -139,7 +139,6 @@
   --button-background: var(--color-accent-hover);
   --button-border: var(--color-accent-hover);
   box-shadow: 0 12px 30px rgba(144, 140, 255, 0.2);
-  transform: translateY(-1px);
 }
 
 .ui-button--secondary {
@@ -151,14 +150,12 @@
   --button-background: var(--color-surface-hover);
   --button-border: var(--color-border-focus);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
-  transform: translateY(-1px);
 }
 
 .ui-button--ghost { --button-color: var(--color-text-muted); }
 .ui-button--ghost:not(:disabled):hover {
   --button-background: var(--color-surface-hover);
   --button-color: var(--color-text);
-  transform: translateY(-1px);
 }
 
 .ui-button--danger {
@@ -171,10 +168,8 @@
   --button-background: var(--color-danger-hover);
   --button-border: var(--color-danger-hover);
   box-shadow: 0 12px 30px rgba(201, 79, 67, 0.2);
-  transform: translateY(-1px);
 }
 
-.ui-button:not(:disabled):active { transform: translateY(1px) scale(0.99); }
 .ui-button:disabled { cursor: not-allowed; opacity: 0.5; }
 .ui-button--loading:disabled { cursor: wait; opacity: 0.82; }
 .ui-button:focus-visible { outline: var(--focus-ring); outline-offset: 2px; }
@@ -188,8 +183,6 @@
     transition: none;
   }
 
-  .ui-button:not(:disabled):hover,
-  .ui-button:not(:disabled):active,
   .ui-button--loading .ui-button__label,
   .ui-button--loading .ui-button__icon,
   .ui-button--loading .ui-button__loader.ui-loader--compact {

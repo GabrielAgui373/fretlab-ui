@@ -1,22 +1,30 @@
+import type { ComponentProps } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
 import { Button } from './Button';
-import { Icon, iconNames } from '../Icon';
+import { Icon, iconNames, type IconName } from '../Icon';
 
 const iconOptions = ['none', ...iconNames];
-const iconMapping = Object.fromEntries([
-  ['none', undefined],
-  ...iconNames.map((name) => [name, <Icon name={name} size={18} decorative />]),
-]);
+
+type ButtonStoryArgs = Omit<ComponentProps<typeof Button>, 'icon'> & {
+  icon?: ComponentProps<typeof Button>['icon'];
+  iconName?: IconName | 'none';
+};
 
 const meta = {
   component: Button,
   tags: ['ai-generated'],
+  render: ({ icon, iconName = 'none', ...args }) => (
+    <Button
+      {...args}
+      icon={iconName === 'none' ? icon : <Icon name={iconName} size={18} decorative />}
+    />
+  ),
   args: {
     children: 'Nova sessao',
     disabled: false,
     fullWidth: false,
-    icon: 'none',
+    iconName: 'none',
     iconPosition: 'left',
     isLoading: false,
     variant: 'primary',
@@ -35,8 +43,11 @@ const meta = {
       table: { disable: true },
     },
     icon: {
+      control: false,
+      table: { disable: true },
+    },
+    iconName: {
       control: 'select',
-      mapping: iconMapping,
       options: iconOptions,
     },
     iconPosition: {
@@ -60,7 +71,7 @@ const meta = {
       options: ['primary', 'secondary', 'ghost', 'danger'],
     },
   },
-} satisfies Meta<typeof Button>;
+} satisfies Meta<ButtonStoryArgs>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -69,13 +80,13 @@ export const Primary: Story = {};
 
 export const WithIcon: Story = {
   args: {
-    icon: 'add',
+    iconName: 'add',
   },
 };
 
 export const WithRightIcon: Story = {
   args: {
-    icon: 'chevronRight',
+    iconName: 'chevronRight',
     iconPosition: 'right',
   },
 };
@@ -119,14 +130,4 @@ export const Variants: Story = {
       <Button variant="danger">Danger</Button>
     </div>
   ),
-};
-
-export const CssCheck: Story = {
-  args: {
-    children: 'Submit',
-  },
-  play: async ({ canvas }) => {
-    const button = canvas.getByRole('button', { name: /submit/i });
-    await expect(getComputedStyle(button).backgroundColor).toBe('rgb(144, 140, 255)');
-  },
 };

@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useId } from "react";
 import { createPortal } from "react-dom";
 import { Icon } from "../Icon";
+import { IconButton } from "../IconButton";
 import "./Modal.css";
 
 export type ModalProps = {
@@ -66,9 +67,11 @@ export function Modal({
             {subtitle && <span className="ui-modal__subtitle">{subtitle}</span>}
             {title && <h2 id={titleId}>{title}</h2>}
           </div>
-          <button aria-label="Fechar" className="ui-modal__close" onClick={onClose}>
-            <Icon name="close" size={19} />
-          </button>
+          <IconButton
+            aria-label="Fechar"
+            icon={<Icon name="close" size={19} decorative />}
+            onClick={onClose}
+          />
         </header>
         <div className="ui-modal__content">{children}</div>
         {footer && <footer className="ui-modal__footer">{footer}</footer>}
