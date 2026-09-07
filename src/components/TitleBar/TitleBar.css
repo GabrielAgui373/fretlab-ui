@@ -125,6 +125,53 @@
 .app-titlebar__close::before { transform: rotate(45deg); }
 .app-titlebar__close::after { transform: rotate(-45deg); }
 
+.app-resize-handles {
+  position: fixed;
+  z-index: calc(var(--z-titlebar) + 1);
+  inset: 0;
+  pointer-events: none;
+}
+
+.app-resize-handle {
+  position: absolute;
+  display: block;
+  pointer-events: auto;
+}
+
+.app-resize-handle--north,
+.app-resize-handle--south {
+  right: 9px;
+  left: 9px;
+  height: 5px;
+  cursor: ns-resize;
+}
+
+.app-resize-handle--east,
+.app-resize-handle--west {
+  top: 9px;
+  bottom: 9px;
+  width: 5px;
+  cursor: ew-resize;
+}
+
+.app-resize-handle--north { top: 0; }
+.app-resize-handle--east { right: 0; }
+.app-resize-handle--south { bottom: 0; }
+.app-resize-handle--west { left: 0; }
+
+.app-resize-handle--north-east,
+.app-resize-handle--south-east,
+.app-resize-handle--south-west,
+.app-resize-handle--north-west {
+  width: 10px;
+  height: 10px;
+}
+
+.app-resize-handle--north-east { top: 0; right: 0; cursor: nesw-resize; }
+.app-resize-handle--south-east { right: 0; bottom: 0; cursor: nwse-resize; }
+.app-resize-handle--south-west { bottom: 0; left: 0; cursor: nesw-resize; }
+.app-resize-handle--north-west { top: 0; left: 0; cursor: nwse-resize; }
+
 @media (max-width: 560px) {
   .app-titlebar__edition { display: none; }
   .app-titlebar__control { width: 42px; }
