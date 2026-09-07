@@ -1,18 +1,97 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect } from 'storybook/test';
-import { Icon, iconNames } from '.';
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect } from "storybook/test";
+import { Icon, type IconName } from ".";
+import "./Icon.stories.css";
+
+const iconGroups: Array<{ label: string; icons: IconName[] }> = [
+  {
+    label: "Navegacao",
+    icons: [
+      "arrow",
+      "back",
+      "chevronDown",
+      "chevronLeft",
+      "chevronRight",
+      "chevronUp",
+      "externalLink",
+      "home",
+      "menu",
+    ],
+  },
+  {
+    label: "Acoes",
+    icons: [
+      "add",
+      "check",
+      "close",
+      "copy",
+      "download",
+      "edit",
+      "filter",
+      "link",
+      "minus",
+      "more",
+      "refresh",
+      "save",
+      "search",
+      "settings",
+      "share",
+      "trash",
+      "upload",
+    ],
+  },
+  {
+    label: "Midia",
+    icons: ["equalizer", "heart", "pause", "play", "spark", "star"],
+  },
+  {
+    label: "Conteudo",
+    icons: ["archive", "calendar", "file", "folder", "library", "mail"],
+  },
+  {
+    label: "Status e seguranca",
+    icons: ["eye", "eyeOff", "help", "info", "lock", "warning"],
+  },
+  {
+    label: "Conta",
+    icons: ["logIn", "logOut", "user", "users"],
+  },
+];
 
 const meta = {
   component: Icon,
-  tags: ['ai-generated'],
+  parameters: {
+    layout: "centered",
+  },
+  tags: ["ai-generated"],
   args: {
-    name: 'play',
+    decorative: false,
+    name: "play",
     size: 24,
+    strokeWidth: 1.75,
+    title: "Reproduzir",
   },
   argTypes: {
+    className: {
+      control: false,
+      table: { disable: true },
+    },
+    decorative: {
+      control: "inline-radio",
+      options: [false, true],
+    },
     name: {
-      control: 'select',
-      options: iconNames,
+      control: "select",
+      options: iconGroups.flatMap(({ icons }) => icons),
+    },
+    size: {
+      control: { type: "range", min: 12, max: 64, step: 1 },
+    },
+    strokeWidth: {
+      control: { type: "range", min: 1, max: 2.5, step: 0.25 },
+    },
+    title: {
+      control: "text",
     },
   },
 } satisfies Meta<typeof Icon>;
@@ -21,48 +100,93 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
-    title: 'Play',
-  },
   play: async ({ canvas }) => {
-    await expect(canvas.getByRole('img', { name: 'Play' })).toBeVisible();
+    await expect(canvas.getByRole("img", { name: "Reproduzir" })).toBeVisible();
   },
 };
 
 export const Decorative: Story = {
   args: {
     decorative: true,
-    name: 'spark',
+    name: "spark",
     size: 32,
+    title: undefined,
   },
 };
 
 export const Library: Story = {
+  parameters: {
+    layout: "padded",
+  },
   render: () => (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(92px, 1fr))',
-        gap: 12,
-        maxWidth: 780,
-      }}
-    >
-      {iconNames.map((name) => (
-        <div
-          key={name}
-          style={{
-            display: 'grid',
-            justifyItems: 'center',
-            gap: 8,
-            padding: 12,
-            border: '1px solid var(--color-border)',
-            borderRadius: 'var(--radius-md)',
-            color: 'var(--color-text-soft)',
-            background: 'var(--color-surface)',
-          }}
-        >
-          <Icon name={name} size={20} />
-          <small style={{ color: 'var(--color-text-subtle)', fontSize: 10 }}>{name}</small>
+    <div className="icon-catalog">
+      {iconGroups.map(({ label, icons }) => (
+        <section className="icon-catalog__section" key={label}>
+          <div className="icon-catalog__heading">
+            <h2>{label}</h2>
+            <span>{icons.length}</span>
+          </div>
+          <div className="icon-catalog__grid">
+            {icons.map((name) => (
+              <div className="icon-catalog__item" key={name}>
+                <span className="icon-catalog__glyph">
+                  <Icon name={name} size={22} decorative />
+                </span>
+                <code>{name}</code>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  ),
+};
+
+export const Sizes: Story = {
+  render: () => (
+    <div className="icon-specimens">
+      {[16, 20, 24, 32, 40].map((size) => (
+        <div className="icon-specimen" key={size}>
+          <span className="icon-specimen__stage">
+            <Icon name="equalizer" size={size} decorative />
+          </span>
+          <code>{size}px</code>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+export const StrokeWeights: Story = {
+  render: () => (
+    <div className="icon-specimens">
+      {[1.5, 1.75, 2].map((strokeWidth) => (
+        <div className="icon-specimen" key={strokeWidth}>
+          <span className="icon-specimen__stage">
+            <Icon name="settings" size={28} strokeWidth={strokeWidth} decorative />
+          </span>
+          <code>{strokeWidth}</code>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+export const ThemeColors: Story = {
+  render: () => (
+    <div className="icon-specimens">
+      {[
+        ["Principal", "var(--color-text)"],
+        ["Suave", "var(--color-text-muted)"],
+        ["Destaque", "var(--color-accent)"],
+        ["Sucesso", "var(--color-success)"],
+        ["Perigo", "var(--color-danger-text)"],
+      ].map(([label, color]) => (
+        <div className="icon-specimen" key={label}>
+          <span className="icon-specimen__stage" style={{ color }}>
+            <Icon name="check" size={28} decorative />
+          </span>
+          <code>{label}</code>
         </div>
       ))}
     </div>

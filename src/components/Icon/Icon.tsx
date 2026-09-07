@@ -1,12 +1,14 @@
 import { forwardRef, useId } from "react";
 import type { IconProps } from "./Icon.types";
 import { iconPaths } from "./iconPaths";
+import "./Icon.css";
 
 export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon({
+  className = "",
   decorative,
   name,
   size = 20,
-  strokeWidth = 1.8,
+  strokeWidth = 1.75,
   title,
   "aria-label": ariaLabel,
   "aria-labelledby": ariaLabelledBy,
@@ -23,6 +25,8 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon({
       aria-hidden={isDecorative ? true : undefined}
       aria-label={isDecorative ? undefined : ariaLabel}
       aria-labelledby={isDecorative ? undefined : labelledBy}
+      className={["ui-icon", className].filter(Boolean).join(" ")}
+      data-icon={name}
       fill="none"
       focusable="false"
       height={size}
@@ -32,7 +36,12 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon({
       width={size}
     >
       {!isDecorative && title && <title id={titleId}>{title}</title>}
-      <g stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth}>
+      <g
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth}
+      >
         {iconPaths[name]}
       </g>
     </svg>
