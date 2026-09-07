@@ -1,15 +1,78 @@
-import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect } from 'storybook/test';
-import { TextInput } from './TextInput';
-import { Icon } from '../Icon';
+import { useState } from "react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect } from "storybook/test";
+import { Icon } from "../Icon";
+import { IconButton } from "../IconButton";
+import { TextInput } from "./TextInput";
+import "./TextInput.stories.css";
 
 const meta = {
   component: TextInput,
-  tags: ['ai-generated'],
+  parameters: {
+    layout: "padded",
+  },
+  tags: ["ai-generated"],
   args: {
-    label: 'Nome',
-    placeholder: 'Ex.: Improviso em Do menor',
+    disabled: false,
+    label: "Nome",
+    optional: false,
+    placeholder: "Ex.: Improviso em Do menor",
+    readOnly: false,
+    required: false,
+    showCount: false,
+    size: "md",
+  },
+  argTypes: {
+    action: {
+      control: false,
+      table: { disable: true },
+    },
+    className: {
+      control: false,
+      table: { disable: true },
+    },
+    containerClassName: {
+      control: false,
+      table: { disable: true },
+    },
+    disabled: {
+      control: "inline-radio",
+      options: [false, true],
+    },
+    leadingIcon: {
+      control: false,
+    },
+    multiline: {
+      control: false,
+      table: { disable: true },
+    },
+    onChange: {
+      control: false,
+      table: { disable: true },
+    },
+    optional: {
+      control: "inline-radio",
+      options: [false, true],
+    },
+    readOnly: {
+      control: "inline-radio",
+      options: [false, true],
+    },
+    required: {
+      control: "inline-radio",
+      options: [false, true],
+    },
+    showCount: {
+      control: "inline-radio",
+      options: [false, true],
+    },
+    size: {
+      control: "inline-radio",
+      options: ["sm", "md", "lg"],
+    },
+    trailingIcon: {
+      control: false,
+    },
   },
 } satisfies Meta<typeof TextInput>;
 
@@ -17,141 +80,226 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => {
-    const [value, setValue] = useState('');
+  render: ({ label, placeholder, size }) => {
+    const [value, setValue] = useState("");
 
     return (
-      <TextInput
-        label={args.label}
-        multiline={false}
-        onChange={(event) => setValue(event.currentTarget.value)}
-        placeholder={args.placeholder}
-        value={value}
-      />
+      <div className="text-input-story">
+        <TextInput
+          label={label}
+          onChange={(event) => setValue(event.currentTarget.value)}
+          placeholder={placeholder}
+          size={size}
+          value={value}
+        />
+      </div>
     );
   },
   play: async ({ canvas, userEvent }) => {
-    await userEvent.type(canvas.getByLabelText('Nome'), 'Pentatonica');
-    await expect(canvas.getByDisplayValue('Pentatonica')).toBeVisible();
+    await userEvent.type(canvas.getByLabelText("Nome"), "Pentatonica");
+    await expect(canvas.getByDisplayValue("Pentatonica")).toBeVisible();
   },
 };
 
-export const WithLeadingIcon: Story = {
-  args: {
-    'aria-label': 'Buscar sessoes',
-    leadingIcon: <Icon name="search" size={18} />,
-    placeholder: 'Buscar sessao...',
-    type: 'search',
+export const SearchWithAction: Story = {
+  render: () => {
+    const [value, setValue] = useState("Pentatonica");
+
+    return (
+      <div className="text-input-story">
+        <TextInput
+          action={
+            <IconButton
+              aria-label="Limpar busca"
+              icon={<Icon name="close" size={16} decorative />}
+              onClick={() => setValue("")}
+              variant="ghost"
+            />
+          }
+          aria-label="Buscar sessoes"
+          leadingIcon={<Icon name="search" size={18} decorative />}
+          onChange={(event) => setValue(event.currentTarget.value)}
+          placeholder="Buscar sessao..."
+          type="search"
+          value={value}
+        />
+      </div>
+    );
+  },
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.click(canvas.getByRole("button", { name: "Limpar busca" }));
+    await expect(canvas.getByLabelText("Buscar sessoes")).toHaveValue("");
   },
 };
 
-export const WithTrailingIcon: Story = {
-  args: {
-    label: 'Email',
-    placeholder: 'voce@email.com',
-    trailingIcon: <Icon name="mail" size={18} />,
-    type: 'email',
+export const PasswordWithAction: Story = {
+  render: () => {
+    const [visible, setVisible] = useState(false);
+
+    return (
+      <div className="text-input-story">
+        <TextInput
+          action={
+            <IconButton
+              aria-label={visible ? "Ocultar senha" : "Mostrar senha"}
+              icon={<Icon name={visible ? "eyeOff" : "eye"} size={17} decorative />}
+              onClick={() => setVisible((current) => !current)}
+              variant="ghost"
+            />
+          }
+          label="Senha"
+          leadingIcon={<Icon name="lock" size={18} decorative />}
+          placeholder="Digite sua senha"
+          type={visible ? "text" : "password"}
+        />
+      </div>
+    );
+  },
+  play: async ({ canvas, userEvent }) => {
+    const input = canvas.getByLabelText("Senha");
+    await expect(input).toHaveAttribute("type", "password");
+    await userEvent.click(canvas.getByRole("button", { name: "Mostrar senha" }));
+    await expect(input).toHaveAttribute("type", "text");
   },
 };
 
-export const WithBothIcons: Story = {
-  args: {
-    label: 'Link',
-    leadingIcon: <Icon name="link" size={18} />,
-    placeholder: 'https://fretlab.app',
-    trailingIcon: <Icon name="externalLink" size={18} />,
-    type: 'url',
-  },
+export const ActionLoading: Story = {
+  render: () => (
+    <div className="text-input-story">
+      <TextInput
+        action={
+          <IconButton
+            aria-label="Verificando link"
+            icon={<Icon name="arrow" size={16} decorative />}
+            isLoading
+            variant="ghost"
+          />
+        }
+        defaultValue="https://fretlab.app/session"
+        label="Link compartilhavel"
+        leadingIcon={<Icon name="link" size={18} decorative />}
+        readOnly
+        type="url"
+      />
+    </div>
+  ),
 };
 
-export const Focused: Story = {
+export const WithIcons: Story = {
   args: {
-    autoFocus: true,
-    label: 'Nome',
-    placeholder: 'Ex.: Improviso em Do menor',
+    label: "Email",
+    leadingIcon: <Icon name="mail" size={18} decorative />,
+    placeholder: "voce@email.com",
+    trailingIcon: <Icon name="check" size={17} decorative />,
+    type: "email",
   },
+  render: (args) => (
+    <div className="text-input-story">
+      <TextInput {...args} />
+    </div>
+  ),
 };
 
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-    label: 'Nome',
-    leadingIcon: <Icon name="lock" size={18} />,
-    placeholder: 'Campo indisponivel',
-    readOnly: true,
-    value: 'Sessao arquivada',
-  },
+export const Sizes: Story = {
+  render: () => (
+    <div className="text-input-story-stack">
+      <TextInput label="Pequeno" placeholder="Campo compacto" size="sm" />
+      <TextInput label="Medio" placeholder="Campo padrao" size="md" />
+      <TextInput label="Grande" placeholder="Campo de destaque" size="lg" />
+    </div>
+  ),
 };
 
-export const ReadOnly: Story = {
-  args: {
-    label: 'Slug',
-    readOnly: true,
-    trailingIcon: <Icon name="copy" size={18} />,
-    value: 'improviso-em-do-menor',
-  },
+export const ValidationStates: Story = {
+  render: () => (
+    <div className="text-input-story-stack">
+      <TextInput
+        error="O email informado nao e valido."
+        label="Com erro"
+        leadingIcon={<Icon name="warning" size={18} decorative />}
+        value="nome@"
+        readOnly
+      />
+      <TextInput
+        label="Validado"
+        success="Disponivel para uso."
+        trailingIcon={<Icon name="check" size={17} decorative />}
+        value="gabriel"
+        readOnly
+      />
+      <TextInput
+        hint="Use um nome curto e facil de reconhecer."
+        label="Com ajuda"
+        placeholder="Nome da sessao"
+      />
+    </div>
+  ),
 };
 
-export const WithHint: Story = {
-  args: {
-    hint: 'Use um nome curto e facil de reconhecer.',
-  },
+export const RequiredAndOptional: Story = {
+  render: () => (
+    <div className="text-input-story-stack">
+      <TextInput label="Nome" placeholder="Campo obrigatorio" required />
+      <TextInput label="Apelido" optional placeholder="Campo opcional" />
+    </div>
+  ),
 };
 
-export const WithError: Story = {
-  args: {
-    error: 'Informe um nome para continuar.',
-    readOnly: true,
-    value: '',
-  },
+export const DisabledAndReadOnly: Story = {
+  render: () => (
+    <div className="text-input-story-stack">
+      <TextInput
+        disabled
+        label="Desabilitado"
+        leadingIcon={<Icon name="lock" size={18} decorative />}
+        value="Campo indisponivel"
+        readOnly
+      />
+      <TextInput
+        action={
+          <IconButton
+            aria-label="Copiar identificador"
+            icon={<Icon name="copy" size={16} decorative />}
+            variant="ghost"
+          />
+        }
+        label="Somente leitura"
+        value="session-7f12a"
+        readOnly
+      />
+    </div>
+  ),
 };
 
-export const WithCount: Story = {
-  args: {
-    label: 'Titulo',
-    maxLength: 120,
-    readOnly: true,
-    showCount: true,
-    trailingIcon: <Icon name="edit" size={18} />,
-    value: 'Improviso em Do menor',
+export const CharacterCount: Story = {
+  render: () => (
+    <div className="text-input-story">
+      <TextInput
+        defaultValue="Solo"
+        label="Titulo"
+        maxLength={24}
+        showCount
+      />
+    </div>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    await userEvent.type(canvas.getByLabelText("Titulo"), " final");
+    await expect(canvas.getByText("10/24")).toBeVisible();
   },
 };
 
 export const Multiline: Story = {
-  args: {
-    label: 'Descricao',
-    maxLength: 2000,
-    multiline: true,
-    placeholder: 'Objetivos, repertorio ou lembretes...',
-    rows: 4,
-    readOnly: true,
-    showCount: true,
-    value: 'Treinar entrada do solo e repetir o trecho final.',
-  },
-};
-
-export const States: Story = {
   render: () => (
-    <div style={{ display: 'grid', gap: 18, maxWidth: 420 }}>
-      <TextInput label="Padrao" placeholder="Digite algo..." />
+    <div className="text-input-story">
       <TextInput
-        label="Com icones"
-        leadingIcon={<Icon name="search" size={18} />}
-        placeholder="Buscar..."
-        trailingIcon={<Icon name="filter" size={18} />}
-      />
-      <TextInput
-        disabled
-        label="Desabilitado"
-        readOnly
-        trailingIcon={<Icon name="lock" size={18} />}
-        value="Nao editavel"
-      />
-      <TextInput
-        error="Informe um valor valido."
-        label="Erro"
-        leadingIcon={<Icon name="warning" size={18} />}
-        placeholder="Campo obrigatorio"
+        defaultValue="Treinar entrada do solo e repetir o trecho final."
+        hint="Registre objetivos, repertorio ou lembretes."
+        label="Descricao"
+        maxLength={2000}
+        multiline
+        optional
+        rows={4}
+        showCount
       />
     </div>
   ),

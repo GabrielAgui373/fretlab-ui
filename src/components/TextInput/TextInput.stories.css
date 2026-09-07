@@ -1,0 +1,11 @@
+.text-input-story,
+.text-input-story-stack {
+  width: 400px;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.text-input-story-stack {
+  display: grid;
+  gap: var(--space-5);
+}

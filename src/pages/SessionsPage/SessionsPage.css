@@ -41,7 +41,8 @@
 .sessions-toolbar h2 { margin: 0; font-size: 1.125rem; letter-spacing: -0.025em; }
 .sessions-toolbar > div:first-child span { color: var(--color-text-subtle); font-size: 0.6875rem; }
 .sessions-toolbar .ui-text-input { width: min(240px, 35vw); }
-.sessions-search { min-height: 38px; background: var(--color-surface); }
+.sessions-search { --text-input-height: 38px; }
+.sessions-search .ui-text-input__field { background: var(--color-surface); }
 
 .sessions-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(205px, 1fr)); gap: var(--space-4); }
 .sessions-grid .session-card:nth-child(2) { animation-delay: 45ms; }

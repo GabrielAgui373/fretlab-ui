@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import { Button, Icon, Loader, TextInput, Toast, Tooltip } from "../../components";
+import { Button, Icon, IconButton, Loader, TextInput, Toast, Tooltip } from "../../components";
 import {
   DeleteSessionModal,
   SessionCard,
@@ -108,8 +108,16 @@ export function SessionsPage({ onOpen }: { onOpen: (session: Session) => void })
           <div className="sessions-toolbar">
             <div><h2>Recentes</h2><span>{filteredSessions.length} encontradas</span></div>
             <TextInput
+              action={search ? (
+                <IconButton
+                  aria-label="Limpar busca"
+                  icon={<Icon name="close" size={16} decorative />}
+                  onClick={() => setSearch("")}
+                  variant="ghost"
+                />
+              ) : undefined}
               aria-label="Buscar sessões"
-              className="sessions-search"
+              containerClassName="sessions-search"
               leadingIcon={<Icon name="search" size={18} />}
               onChange={(event) => setSearch(event.currentTarget.value)}
               placeholder="Buscar sessão..."
