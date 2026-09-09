@@ -1,0 +1,90 @@
+.ui-tooltip__positioner {
+  z-index: var(--z-tooltip, 400);
+  width: max-content;
+  max-width: min(220px, calc(100vw - 16px), var(--tooltip-max-width, 220px));
+}
+
+.ui-tooltip {
+  position: relative;
+  box-sizing: border-box;
+  padding: 5px 8px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 6px;
+  color: var(--color-text-soft);
+  background: var(--color-surface-raised);
+  box-shadow: 0 3px 10px rgb(0 0 0 / 24%);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
+  opacity: 0;
+  transform: translate(var(--tooltip-enter-x, 0), var(--tooltip-enter-y, 0));
+  transition: opacity 160ms ease-out, transform 160ms var(--ease-out);
+}
+
+.ui-tooltip[data-state="open"] {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.ui-tooltip[data-state="close"] {
+  transition-duration: 120ms;
+}
+
+.ui-tooltip__content {
+  display: block;
+  max-height: max(0px, calc(var(--tooltip-max-height, 100dvh) - 12px));
+  overflow: auto;
+  overflow-wrap: anywhere;
+}
+
+.ui-tooltip__arrow {
+  position: absolute;
+  box-sizing: border-box;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface-raised);
+  transform: rotate(45deg);
+}
+
+.ui-tooltip--top { --tooltip-enter-y: 3px; }
+.ui-tooltip--bottom { --tooltip-enter-y: -3px; }
+.ui-tooltip--left { --tooltip-enter-x: 3px; }
+.ui-tooltip--right { --tooltip-enter-x: -3px; }
+
+.ui-tooltip--top .ui-tooltip__arrow {
+  bottom: -4px;
+  left: var(--tooltip-arrow-left);
+  border-top: 0;
+  border-left: 0;
+}
+
+.ui-tooltip--bottom .ui-tooltip__arrow {
+  top: -4px;
+  left: var(--tooltip-arrow-left);
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.ui-tooltip--left .ui-tooltip__arrow {
+  top: var(--tooltip-arrow-top);
+  right: -4px;
+  border-bottom: 0;
+  border-left: 0;
+}
+
+.ui-tooltip--right .ui-tooltip__arrow {
+  top: var(--tooltip-arrow-top);
+  left: -4px;
+  border-top: 0;
+  border-right: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-tooltip {
+    transition: none;
+    transform: none;
+  }
+}
