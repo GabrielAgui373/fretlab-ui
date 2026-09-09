@@ -27,6 +27,7 @@ const meta = {
     iconName: 'none',
     iconPosition: 'left',
     isLoading: false,
+    loadingVariant: 'inline',
     variant: 'primary',
     size: 'md',
   },
@@ -57,6 +58,10 @@ const meta = {
     isLoading: {
       control: 'inline-radio',
       options: [false, true],
+    },
+    loadingVariant: {
+      control: 'inline-radio',
+      options: ['inline', 'replace'],
     },
     size: {
       control: 'inline-radio',
@@ -101,6 +106,14 @@ export const Loading: Story = {
       'aria-busy',
       'true',
     );
+  },
+};
+
+export const LoadingReplace: Story = {
+  args: {
+    iconName: 'save',
+    isLoading: true,
+    loadingVariant: 'replace',
   },
 };
 

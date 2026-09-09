@@ -20,6 +20,7 @@ export const iconNames = [
   "file",
   "filter",
   "folder",
+  "grid",
   "heart",
   "help",
   "home",

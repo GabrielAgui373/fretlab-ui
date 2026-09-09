@@ -8,54 +8,77 @@ function createSinePath(
   end = 720,
 ) {
   const points: string[] = [];
-  for (let x = start; x <= end; x += 4) {
+  for (let x = start; x <= end; x += 2) {
     const y = 36 + amplitude * Math.sin(((x + phase) * Math.PI * 2) / wavelength);
     points.push(`${x === start ? "M" : "L"}${x} ${y.toFixed(2)}`);
   }
   return points.join(" ");
 }
 
-const PRIMARY_WAVE = createSinePath(13, 55, 0);
-const SECONDARY_WAVE = createSinePath(9, 60, 18);
-const PRIMARY_WAVE_VISIBLE = createSinePath(13, 55, 0, -2, 302);
-const SECONDARY_WAVE_VISIBLE = createSinePath(9, 60, 18, -2, 302);
-const WAVE_HOVER_SHIFT = 26;
+const PRIMARY_WAVE = createSinePath(20, 104, 0);
+const SECONDARY_WAVE = createSinePath(13, 104, 30);
+const WAVE_LAYERS = [
+  { name: "primary", path: PRIMARY_WAVE },
+  { name: "secondary", path: SECONDARY_WAVE },
+] as const;
+const WAVE_HOVER_SHIFT = 36;
+const WAVE_LENGTH = 104;
 
 export function SessionWave({ animated = false }: { animated?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const motionRef = useRef<HTMLSpanElement>(null);
+  const motionRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const shiftRef = useRef(0);
+  const isMovingRef = useRef(false);
 
-  function resetWavePosition() {
-    const motion = motionRef.current;
-    if (!motion) return;
+  function setPositionWithoutTransition(position: number) {
+    const container = containerRef.current;
+    if (!container) return;
 
-    shiftRef.current = 0;
-    motion.style.transition = "none";
-    motion.style.transform = "translate3d(0, 0, 0)";
-    void motion.offsetWidth;
-    motion.style.removeProperty("transition");
+    motionRefs.current.forEach((motion) => {
+      if (!motion) return;
+      motion.style.transition = "none";
+      motion.style.transform = `translate3d(${position}px, 0, 0)`;
+    });
+    void container.offsetWidth;
+    motionRefs.current.forEach((motion) => motion?.style.removeProperty("transition"));
   }
 
   function advanceWave() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (isMovingRef.current) return;
+
     const container = containerRef.current;
-    const motion = motionRef.current;
-    if (!container || !motion) return;
+    if (!container) return;
 
-    const resetAt = Math.max(WAVE_HOVER_SHIFT * 3, container.clientWidth * 0.75);
-    const nextShift = shiftRef.current + WAVE_HOVER_SHIFT;
+    const period = container.clientWidth * (WAVE_LENGTH / 300);
+    let current = shiftRef.current;
 
-    if (nextShift >= resetAt) resetWavePosition();
+    if (current + WAVE_HOVER_SHIFT >= period) {
+      current -= period;
+      setPositionWithoutTransition(current);
+    }
 
-    shiftRef.current += WAVE_HOVER_SHIFT;
-    motion.style.transform = `translate3d(${shiftRef.current}px, 0, 0)`;
+    const next = current + WAVE_HOVER_SHIFT;
+    shiftRef.current = next;
+    isMovingRef.current = true;
+    motionRefs.current.forEach((motion) => {
+      if (motion) motion.style.transform = `translate3d(${next}px, 0, 0)`;
+    });
+  }
+
+  function finishWaveMotion() {
+    isMovingRef.current = false;
   }
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container || typeof ResizeObserver === "undefined") return;
 
-    const observer = new ResizeObserver(() => resetWavePosition());
+    const observer = new ResizeObserver(() => {
+      shiftRef.current = 0;
+      isMovingRef.current = false;
+      setPositionWithoutTransition(0);
+    });
     observer.observe(container);
 
     return () => observer.disconnect();
@@ -64,44 +87,28 @@ export function SessionWave({ animated = false }: { animated?: boolean }) {
   return (
     <div
       aria-hidden="true"
-      className={`session-wave ${animated ? "session-wave--animated" : ""}`}
-      onPointerEnter={advanceWave}
+      className="session-wave"
+      onPointerEnter={animated ? advanceWave : undefined}
       ref={containerRef}
     >
-      <span className="session-wave__motion" ref={motionRef}>
-        <svg preserveAspectRatio="none" viewBox="0 0 300 72">
-          <g className="session-wave__reservoir">
+      {WAVE_LAYERS.map(({ name, path }, index) => (
+        <span
+          className={`session-wave__motion session-wave__motion--${name}`}
+          key={name}
+          onTransitionEnd={name === "secondary" ? finishWaveMotion : undefined}
+          ref={(element) => {
+            motionRefs.current[index] = element;
+          }}
+        >
+          <svg focusable="false" preserveAspectRatio="none" viewBox="0 0 300 72">
             <path
-              className="session-wave__line session-wave__line--primary"
-              d={PRIMARY_WAVE}
-              pathLength="1"
+              className={`session-wave__line session-wave__line--${name}`}
+              d={path}
               vectorEffect="non-scaling-stroke"
             />
-            <path
-              className="session-wave__line session-wave__line--secondary"
-              d={SECONDARY_WAVE}
-              pathLength="1"
-              vectorEffect="non-scaling-stroke"
-            />
-          </g>
-          {animated && (
-            <g className="session-wave__draw">
-              <path
-                className="session-wave__line session-wave__line--primary"
-                d={PRIMARY_WAVE_VISIBLE}
-                pathLength="1"
-                vectorEffect="non-scaling-stroke"
-              />
-              <path
-                className="session-wave__line session-wave__line--secondary"
-                d={SECONDARY_WAVE_VISIBLE}
-                pathLength="1"
-                vectorEffect="non-scaling-stroke"
-              />
-            </g>
-          )}
-        </svg>
-      </span>
+          </svg>
+        </span>
+      ))}
     </div>
   );
 }

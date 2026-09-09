@@ -7,12 +7,14 @@ export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
 export type ButtonType = "button" | "submit" | "reset";
 export type ButtonIconPosition = "left" | "right";
+export type ButtonLoadingVariant = "inline" | "replace";
 
 export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> & {
   fullWidth?: boolean;
   icon?: ReactElement<IconProps>;
   iconPosition?: ButtonIconPosition;
   isLoading?: boolean;
+  loadingVariant?: ButtonLoadingVariant;
   size?: ButtonSize;
   type?: ButtonType;
   variant?: ButtonVariant;
@@ -26,6 +28,7 @@ export function Button({
   icon,
   iconPosition = "left",
   isLoading = false,
+  loadingVariant = "inline",
   size = "md",
   type = "button",
   variant = "primary",
@@ -42,6 +45,7 @@ export function Button({
     hasLabel ? "ui-button--has-label" : "",
     fullWidth ? "ui-button--full" : "",
     isLoading ? "ui-button--loading" : "",
+    `ui-button--loading-${loadingVariant}`,
     className,
   ]
     .filter(Boolean)

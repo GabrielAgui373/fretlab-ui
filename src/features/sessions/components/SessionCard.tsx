@@ -1,12 +1,14 @@
 import { memo } from "react";
-import { Icon, IconButton, Tooltip } from "../../../components";
+import { Button, Icon } from "../../../components";
 import type { Session } from "../types";
 import { formatRelativeDate } from "../utils";
 import "./sessions.css";
 
 type SessionCardProps = {
   index: number;
-  isBusy: boolean;
+  isInspecting: boolean;
+  isOpening: boolean;
+  layout?: "card" | "list";
   onInspect: (session: Session) => void;
   onOpen: (session: Session) => void;
   session: Session;
@@ -14,41 +16,56 @@ type SessionCardProps = {
 
 export const SessionCard = memo(function SessionCard({
   index,
-  isBusy,
+  isInspecting,
+  isOpening,
+  layout = "card",
   onInspect,
   onOpen,
   session,
 }: SessionCardProps) {
   return (
-    <article className="session-card">
-      <button
-        aria-label={`Ver detalhes de ${session.name}`}
-        className="session-card__hit-area"
-        disabled={isBusy}
-        onClick={() => onInspect(session)}
-      />
-      <div className={`session-card__art session-card__art--${(index % 4) + 1}`}>
+    <article className={`session-card session-card--${layout}`}>
+      <div
+        aria-hidden="true"
+        className={`session-card__art session-card__art--${(index % 4) + 1}`}
+      >
         <span>{session.name.slice(0, 1).toLocaleUpperCase()}</span>
-        <Tooltip content={`Abrir ${session.name}`} placement="left">
-          <IconButton
-            aria-label={`Abrir ${session.name}`}
-            className="session-card__play"
-            icon={<Icon name="play" size={18} decorative />}
-            isLoading={isBusy}
-            onClick={() => onOpen(session)}
-            variant="secondary"
-          />
-        </Tooltip>
+        <Icon name="equalizer" size={28} strokeWidth={1.5} decorative />
       </div>
       <div className="session-card__content">
-        <div className="session-card__heading">
-          <h3>{session.name}</h3>
-          <Icon name="more" size={20} />
+        <div className="session-card__copy">
+          <h3 title={session.name}>{session.name}</h3>
+          <p>{session.description || "Sem descrição"}</p>
         </div>
-        <p>{session.description || "Sem descrição"}</p>
         <div className="session-card__meta">
-          <span>Aberta {formatRelativeDate(session.last_opened_at)}</span>
-          <Icon name="arrow" size={16} />
+          <Icon name="calendar" size={15} decorative />
+          <span>Última abertura</span>
+          <strong>{formatRelativeDate(session.last_opened_at)}</strong>
+        </div>
+        <div className="session-card__actions">
+          <Button
+            aria-label={`Ver detalhes e editar ${session.name}`}
+            disabled={isOpening}
+            icon={<Icon name="info" size={16} decorative />}
+            isLoading={isInspecting}
+            loadingVariant="replace"
+            onClick={() => onInspect(session)}
+            size="sm"
+            variant="secondary"
+          >
+            Detalhes
+          </Button>
+          <Button
+            aria-label={`Abrir ${session.name}`}
+            disabled={isInspecting}
+            icon={<Icon name="play" size={16} decorative />}
+            isLoading={isOpening}
+            loadingVariant="replace"
+            onClick={() => onOpen(session)}
+            size="sm"
+          >
+            Abrir
+          </Button>
         </div>
       </div>
     </article>

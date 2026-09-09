@@ -9,6 +9,7 @@ import {
 } from "../../features/sessions/components";
 import { useSessionLibrary } from "../../features/sessions";
 import type { Session, SessionFormValues } from "../../features/sessions";
+import { formatRelativeDate } from "../../features/sessions/utils";
 import "./SessionsPage.css";
 
 export function SessionsPage({ onOpen }: { onOpen: (session: Session) => void }) {
@@ -26,6 +27,7 @@ export function SessionsPage({ onOpen }: { onOpen: (session: Session) => void })
     updateSession,
   } = useSessionLibrary();
   const [search, setSearch] = useState("");
+  const [viewMode, setViewMode] = useState<"card" | "list">("card");
   const [createOpen, setCreateOpen] = useState(false);
   const [details, setDetails] = useState<Session | null>(null);
   const [editing, setEditing] = useState<Session | null>(null);
@@ -40,6 +42,17 @@ export function SessionsPage({ onOpen }: { onOpen: (session: Session) => void })
         .includes(query),
     );
   }, [search, sessions]);
+
+  const mostRecentSession = useMemo(
+    () => sessions.reduce<Session | null>((mostRecent, session) => {
+      if (!mostRecent) return session;
+
+      return new Date(session.last_opened_at) > new Date(mostRecent.last_opened_at)
+        ? session
+        : mostRecent;
+    }, null),
+    [sessions],
+  );
 
   const handleInspect = useCallback(
     async (session: Session) => {
@@ -81,7 +94,7 @@ export function SessionsPage({ onOpen }: { onOpen: (session: Session) => void })
     <div className="sessions-layout">
       <main className="sessions-main">
         <header className="sessions-header">
-          <div><span className="eyebrow">Sua biblioteca</span><h1>Sessões</h1></div>
+          <h1>Sessões</h1>
           <Tooltip content="Criar uma nova sessão de estudo" placement="left">
             <Button
               icon={<Icon name="add" size={18} decorative />}
@@ -92,47 +105,133 @@ export function SessionsPage({ onOpen }: { onOpen: (session: Session) => void })
           </Tooltip>
         </header>
 
-        <section className="sessions-hero">
-          <div>
-            <span className="eyebrow">Continue de onde parou</span>
-            <h2>Transforme repetição em progresso.</h2>
-            <p>Organize cada estudo em um lugar e mantenha suas ideias por perto.</p>
+        <section aria-label="Resumo da biblioteca" className="sessions-overview">
+          <div className="sessions-overview__total">
+            <svg
+              aria-hidden="true"
+              className="sessions-overview__sessions-icon"
+              focusable="false"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.8"
+            >
+              <path d="m12 3 9 5-9 5-9-5Z" />
+              <path d="m3 12 9 5 9-5M3 16l9 5 9-5" />
+            </svg>
+            <strong>{sessions.length}</strong>
+            <span>{sessions.length === 1 ? "sessão na biblioteca" : "sessões na biblioteca"}</span>
           </div>
-          <div className="sessions-hero__stats">
-            <div className="sessions-hero__count"><strong>{sessions.length.toString().padStart(2, "0")}</strong><span>{sessions.length === 1 ? "sessão" : "sessões"}</span></div>
+
+          <div className="sessions-overview__recent">
+            {mostRecentSession ? (
+              <>
+                <span className="sessions-overview__label">Última sessão</span>
+                <h2 title={mostRecentSession.name}>{mostRecentSession.name}</h2>
+                <p>Aberta {formatRelativeDate(mostRecentSession.last_opened_at)}</p>
+                <Button
+                  aria-label={`Retomar ${mostRecentSession.name}`}
+                  icon={<Icon name="play" size={18} strokeWidth={2.4} decorative />}
+                  isLoading={busyAction === `open:${mostRecentSession.id}`}
+                  disabled={Boolean(busyAction && busyAction !== `open:${mostRecentSession.id}`)}
+                  onClick={() => void handleOpen(mostRecentSession)}
+                  size="md"
+                  variant="primary"
+                >
+                  Retomar
+                </Button>
+              </>
+            ) : (
+              <>
+                <span className="sessions-overview__label">Última sessão</span>
+                <h2>Nenhuma sessão ainda</h2>
+                <p>Suas sessões recentes aparecerão aqui.</p>
+                <Button icon={<Icon name="add" size={18} strokeWidth={2.25} decorative />} onClick={() => setCreateOpen(true)}>
+                  Criar sessão
+                </Button>
+              </>
+            )}
+          </div>
+
+          <div className="sessions-overview__wave" aria-hidden="true">
             <SessionWave animated />
           </div>
         </section>
 
         <section className="sessions-library">
           <div className="sessions-toolbar">
-            <div><h2>Recentes</h2><span>{filteredSessions.length} encontradas</span></div>
-            <TextInput
-              action={search ? (
-                <IconButton
-                  aria-label="Limpar busca"
-                  icon={<Icon name="close" size={16} decorative />}
-                  onClick={() => setSearch("")}
-                  variant="ghost"
-                />
-              ) : undefined}
-              aria-label="Buscar sessões"
-              containerClassName="sessions-search"
-              leadingIcon={<Icon name="search" size={18} />}
-              onChange={(event) => setSearch(event.currentTarget.value)}
-              placeholder="Buscar sessão..."
-              type="search"
-              value={search}
-            />
+            <div>
+              <h2>Recentes</h2>
+              <span>
+                {filteredSessions.length}{" "}
+                {filteredSessions.length === 1 ? "encontrada" : "encontradas"}
+              </span>
+            </div>
+            <div className="sessions-toolbar__controls">
+              <TextInput
+                action={search ? (
+                  <IconButton
+                    aria-label="Limpar busca"
+                    icon={<Icon name="close" size={16} decorative />}
+                    onClick={() => setSearch("")}
+                    variant="ghost"
+                  />
+                ) : undefined}
+                aria-label="Buscar sessões"
+                containerClassName="sessions-search"
+                leadingIcon={<Icon name="search" size={18} />}
+                onChange={(event) => setSearch(event.currentTarget.value)}
+                placeholder="Buscar sessão..."
+                type="search"
+                value={search}
+              />
+              <div aria-label="Modo de visualização" className="sessions-view-switch" role="group">
+                <Button
+                  aria-controls="sessions-results"
+                  aria-pressed={viewMode === "card"}
+                  icon={<Icon name="grid" size={15} decorative />}
+                  onClick={() => setViewMode("card")}
+                  size="sm"
+                  variant={viewMode === "card" ? "primary" : "secondary"}
+                >
+                  Cards
+                </Button>
+                <Button
+                  aria-controls="sessions-results"
+                  aria-pressed={viewMode === "list"}
+                  icon={<Icon name="menu" size={15} decorative />}
+                  onClick={() => setViewMode("list")}
+                  size="sm"
+                  variant={viewMode === "list" ? "primary" : "secondary"}
+                >
+                  Lista
+                </Button>
+              </div>
+            </div>
           </div>
 
           {filteredSessions.length ? (
-            <div className="sessions-grid">
+            <div
+              aria-label={`Sessões em visualização de ${viewMode === "card" ? "cards" : "lista"}`}
+              className={`sessions-grid sessions-grid--${viewMode}`}
+              id="sessions-results"
+            >
+              {viewMode === "list" && (
+                <div aria-hidden="true" className="sessions-list-header">
+                  <span>Sessão</span>
+                  <span>Última abertura</span>
+                  <span>Ações</span>
+                </div>
+              )}
               {filteredSessions.map((session, index) => (
                 <SessionCard
                   index={index}
-                  isBusy={busyAction?.endsWith(session.id) ?? false}
+                  isInspecting={busyAction === `details:${session.id}`}
+                  isOpening={busyAction === `open:${session.id}`}
                   key={session.id}
+                  layout={viewMode}
                   onInspect={handleInspect}
                   onOpen={handleOpen}
                   session={session}

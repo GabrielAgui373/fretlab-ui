@@ -23,6 +23,7 @@ export const iconPaths: Record<IconName, ReactNode> = {
   file: <><path d="M14 3.5H7a2 2 0 0 0-2 2v13A2 2 0 0 0 7 20.5h10a2 2 0 0 0 2-2v-10Z" /><path d="M14 3.5v5h5" /></>,
   filter: <path d="M4 6h16M7 12h10M10 18h4" />,
   folder: <path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" />,
+  grid: <><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" /><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" /><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" /><rect x="13.5" y="13.5" width="7" height="7" rx="1.5" /></>,
   heart: <path d="M20.5 9c0 5-8.5 10-8.5 10S3.5 14 3.5 9A4.5 4.5 0 0 1 12 6.9 4.5 4.5 0 0 1 20.5 9Z" />,
   help: <><circle cx="12" cy="12" r="9" /><path d="M9.5 9.25a2.75 2.75 0 1 1 4.5 2.1c-1.25.9-2 1.4-2 2.9" /><path d="M12 17.5h.01" /></>,
   home: <><path d="m3.5 10.5 8.5-7 8.5 7" /><path d="M5.5 9.5v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-9M9.5 20.5v-6h5v6" /></>,

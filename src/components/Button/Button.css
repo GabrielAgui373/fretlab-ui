@@ -72,7 +72,10 @@
 }
 
 .ui-button__label {
-  transition: transform var(--duration-normal) var(--ease-spring);
+  opacity: 1;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    transform var(--duration-normal) var(--ease-spring);
 }
 
 .ui-button--loading .ui-button__label {
@@ -93,6 +96,36 @@
 
 .ui-button--loading .ui-button__loader.ui-loader--compact.ui-loader--active {
   transform: translateX(0);
+}
+
+.ui-button--loading-replace .ui-button__loader-slot {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+}
+
+.ui-button--loading-replace .ui-button__loader.ui-loader--compact {
+  transform: translateX(-14px) scale(0.78);
+}
+
+.ui-button--loading-replace.ui-button--loading .ui-button__label,
+.ui-button--loading-replace.ui-button--loading .ui-button__icon {
+  opacity: 0;
+  transform: translateX(8px) scale(0.96);
+}
+
+.ui-button--loading-replace.ui-button--loading .ui-button__loader.ui-loader--compact {
+  width: 28px;
+  opacity: 1;
+  transform: none;
+}
+
+.ui-button--loading-replace.ui-button--loading.ui-button--icon-right .ui-button__icon {
+  width: var(--button-icon-size);
+  margin-left: var(--button-media-gap);
 }
 
 .ui-button--loading.ui-button--icon-right .ui-button__icon {
