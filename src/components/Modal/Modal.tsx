@@ -1,8 +1,10 @@
-import { type HTMLAttributes, type ReactNode, useEffect, useId } from "react";
+import { type HTMLAttributes, type ReactNode, useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
 import { Icon } from "../Icon";
 import { IconButton } from "../IconButton";
 import "./Modal.css";
+
+const exitDuration = 480;
 
 export type ModalProps = {
   "aria-label"?: string;
@@ -60,6 +62,7 @@ export function ModalHeader({
       {showCloseButton && onClose && (
         <IconButton
           aria-label={closeLabel}
+          className="ui-modal__close"
           icon={<Icon name="close" size={19} decorative />}
           onClick={onClose}
         />
@@ -106,10 +109,37 @@ export function Modal({
   title,
 }: ModalProps) {
   const titleId = useId();
+  const [shouldRender, setShouldRender] = useState(isOpen);
+  const [isVisible, setIsVisible] = useState(false);
   const bodyContent = body ?? children;
   const labelledBy = ariaLabelledBy ?? (header === undefined && title ? titleId : undefined);
   const shouldRenderDefaultHeader =
     header === undefined && (Boolean(title) || Boolean(subtitle) || showCloseButton);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      return;
+    }
+
+    setIsVisible(false);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen || !shouldRender) return;
+
+    const frame = window.requestAnimationFrame(() => setIsVisible(true));
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [isOpen, shouldRender]);
+
+  useEffect(() => {
+    if (isOpen || !shouldRender) return;
+
+    const timeout = window.setTimeout(() => setShouldRender(false), exitDuration);
+
+    return () => window.clearTimeout(timeout);
+  }, [isOpen, shouldRender]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -127,11 +157,12 @@ export function Modal({
     };
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!shouldRender) return null;
 
   return createPortal(
     <div
       className={`ui-modal-backdrop ui-modal-backdrop--${placement}`}
+      data-state={isVisible ? "open" : "closed"}
       onMouseDown={() => closeOnBackdrop && onClose()}
       role="presentation"
     >
@@ -148,10 +179,18 @@ export function Modal({
           <ModalHeader
             className={headerClassName}
             onClose={onClose}
-            showCloseButton={showCloseButton}
+            showCloseButton={false}
             subtitle={subtitle}
             title={title}
             titleId={titleId}
+          />
+        )}
+        {header === undefined && showCloseButton && (
+          <IconButton
+            aria-label="Fechar"
+            className="ui-modal__close"
+            icon={<Icon name="close" size={19} decorative />}
+            onClick={onClose}
           />
         )}
         {bodyContent && <ModalBody className={bodyClassName}>{bodyContent}</ModalBody>}

@@ -132,7 +132,6 @@
   position: relative;
   z-index: 2;
   --icon-button-size: 36px;
-  padding-left: 2px;
   border: 0;
   border-radius: 50%;
   color: var(--color-text);

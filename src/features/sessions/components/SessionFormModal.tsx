@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { Button, Modal, TextInput } from "../../../components";
 import type { TextInputChangeEvent } from "../../../components";
 import type { SessionFormValues } from "../types";
@@ -22,6 +22,13 @@ export function SessionFormModal({
   onSubmit,
 }: SessionFormModalProps) {
   const [values, setValues] = useState(initialValues);
+  const wasOpen = useRef(isOpen);
+
+  useEffect(() => {
+    if (isOpen && !wasOpen.current) setValues(initialValues);
+
+    wasOpen.current = isOpen;
+  }, [initialValues, isOpen]);
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -72,14 +79,16 @@ export function SessionFormModal({
           maxLength={120}
           onChange={handleNameChange}
           placeholder="Ex.: Improviso em Dó menor"
+          required
           showCount
           value={values.name}
         />
         <TextInput
-          label="Descrição (opcional)"
+          label="Descrição"
           maxLength={2000}
           multiline
           onChange={handleDescriptionChange}
+          optional
           placeholder="Objetivos, repertório ou lembretes para esta sessão..."
           rows={4}
           showCount

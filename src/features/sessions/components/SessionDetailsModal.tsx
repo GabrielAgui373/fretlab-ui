@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Button, Icon, Modal } from "../../../components";
 import type { Session } from "../types";
 import { formatFullDate } from "../utils";
@@ -20,6 +21,12 @@ export function SessionDetailsModal({
   onOpen,
   session,
 }: SessionDetailsModalProps) {
+  const [displayedSession, setDisplayedSession] = useState(session);
+
+  useEffect(() => {
+    if (session) setDisplayedSession(session);
+  }, [session]);
+
   return (
     <Modal
       className="session-details"
@@ -34,14 +41,14 @@ export function SessionDetailsModal({
       placement="right"
       subtitle="Detalhes da sessão"
     >
-      {session && (
+      {displayedSession && (
         <>
           <div className="session-details__art">
-            <span>{session.name.slice(0, 1).toLocaleUpperCase()}</span>
+            <span>{displayedSession.name.slice(0, 1).toLocaleUpperCase()}</span>
           </div>
           <div className="session-details__body">
-            <h2>{session.name}</h2>
-            <p>{session.description || "Nenhuma descrição adicionada."}</p>
+            <h2>{displayedSession.name}</h2>
+            <p>{displayedSession.description || "Nenhuma descrição adicionada."}</p>
             <Button
               fullWidth
               icon={<Icon name="play" size={17} />}
@@ -52,8 +59,8 @@ export function SessionDetailsModal({
               Abrir sessão
             </Button>
             <dl className="session-details__dates">
-              <div><dt>Último acesso</dt><dd>{formatFullDate(session.last_opened_at)}</dd></div>
-              <div><dt>Criada em</dt><dd>{formatFullDate(session.created_at)}</dd></div>
+              <div><dt>Último acesso</dt><dd>{formatFullDate(displayedSession.last_opened_at)}</dd></div>
+              <div><dt>Criada em</dt><dd>{formatFullDate(displayedSession.created_at)}</dd></div>
             </dl>
           </div>
         </>

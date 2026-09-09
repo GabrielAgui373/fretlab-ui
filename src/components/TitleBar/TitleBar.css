@@ -1,7 +1,7 @@
 .app-titlebar {
   position: relative;
   z-index: var(--z-titlebar);
-  height: 42px;
+  height: var(--titlebar-height);
   display: grid;
   grid-template-columns: auto minmax(60px, 1fr) auto;
   align-items: stretch;

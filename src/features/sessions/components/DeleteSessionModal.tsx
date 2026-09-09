@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Button, Icon, Modal } from "../../../components";
 import type { Session } from "../types";
 import "./sessions.css";
@@ -13,6 +14,12 @@ export function DeleteSessionModal({
   onConfirm: () => void;
   session: Session | null;
 }) {
+  const [displayedSession, setDisplayedSession] = useState(session);
+
+  useEffect(() => {
+    if (session) setDisplayedSession(session);
+  }, [session]);
+
   return (
     <Modal
       className="delete-session"
@@ -27,10 +34,10 @@ export function DeleteSessionModal({
       onClose={onCancel}
       size="sm"
     >
-      {session && (
+      {displayedSession && (
         <div className="delete-session__body">
           <span><Icon name="trash" /></span>
-          <h2>Excluir “{session.name}”?</h2>
+          <h2>Excluir “{displayedSession.name}”?</h2>
           <p>Essa ação é permanente e os dados associados à sessão serão removidos.</p>
         </div>
       )}

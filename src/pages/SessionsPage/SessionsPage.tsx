@@ -158,16 +158,14 @@ export function SessionsPage({ onOpen }: { onOpen: (session: Session) => void })
         </section>
       </main>
 
-      {createOpen && (
-        <SessionFormModal
-          initialValues={{ name: "", description: "" }}
-          isBusy={busyAction === "create"}
-          isOpen
-          mode="create"
-          onClose={() => setCreateOpen(false)}
-          onSubmit={handleCreate}
-        />
-      )}
+      <SessionFormModal
+        initialValues={{ name: "", description: "" }}
+        isBusy={busyAction === "create"}
+        isOpen={createOpen}
+        mode="create"
+        onClose={() => setCreateOpen(false)}
+        onSubmit={handleCreate}
+      />
       <SessionDetailsModal
         isOpening={Boolean(details && busyAction === `open:${details.id}`)}
         onClose={() => setDetails(null)}
@@ -176,16 +174,14 @@ export function SessionsPage({ onOpen }: { onOpen: (session: Session) => void })
         onOpen={() => details && void handleOpen(details)}
         session={details}
       />
-      {editing && (
-        <SessionFormModal
-          initialValues={{ name: editing.name, description: editing.description ?? "" }}
-          isBusy={busyAction === "edit"}
-          isOpen
-          mode="edit"
-          onClose={() => setEditing(null)}
-          onSubmit={handleUpdate}
-        />
-      )}
+      <SessionFormModal
+        initialValues={{ name: editing?.name ?? "", description: editing?.description ?? "" }}
+        isBusy={busyAction === "edit"}
+        isOpen={Boolean(editing)}
+        mode="edit"
+        onClose={() => setEditing(null)}
+        onSubmit={handleUpdate}
+      />
       <DeleteSessionModal
         isBusy={busyAction === "delete"}
         onCancel={() => setDeleteTarget(null)}

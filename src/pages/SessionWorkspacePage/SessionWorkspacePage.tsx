@@ -63,16 +63,14 @@ export function SessionWorkspacePage({
         </section>
       </main>
 
-      {isEditing && (
-        <SessionFormModal
-          initialValues={{ name: session.name, description: session.description ?? "" }}
-          isBusy={isSaving}
-          isOpen
-          mode="edit"
-          onClose={() => setIsEditing(false)}
-          onSubmit={handleUpdate}
-        />
-      )}
+      <SessionFormModal
+        initialValues={{ name: session.name, description: session.description ?? "" }}
+        isBusy={isSaving}
+        isOpen={isEditing}
+        mode="edit"
+        onClose={() => setIsEditing(false)}
+        onSubmit={handleUpdate}
+      />
       <Feedback error={error} notice={notice} onDismiss={() => setError(null)} />
     </div>
   );
